@@ -95,6 +95,14 @@ export default function App() {
                       visibility={VISIBILITY_LEVELS.PRIVATE}
                       exact
                     />
+                    <Routes.Metrics
+                      path="/insights"
+                      componentProps={{
+                        user,
+                      }}
+                      visibility={VISIBILITY_LEVELS.ADMIN}
+                      exact
+                    />
                     {/* contains nested routes */}
                     <Routes.SettingsAdmin
                       path="/settings*"
