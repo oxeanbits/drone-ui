@@ -6,6 +6,7 @@ import { useRepo, useLatestRepos } from './repo';
 import useBranches from './use-branches';
 import useCrons from './use-crons';
 import useDeployments from './use-deployments';
+import useSystemMetrics from './metrics';
 import useSystemOverview from './overview';
 import useSecrets from './use-secrets';
 import { useUserList } from './user';
@@ -19,6 +20,7 @@ export {
   useRecentBuilds,
   useBranches,
   useDeployments,
+  useSystemMetrics,
   useSystemOverview,
   useRepo,
   useSecrets,

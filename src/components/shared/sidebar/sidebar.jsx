@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 
 import logo from 'svg/logo.svg';
+import { ReactComponent as MetricsIcon } from 'svg/metrics.svg';
 import { ReactComponent as SearchIcon } from 'svg/search.svg';
 import { ReactComponent as SettingsIcon } from 'svg/settings.svg';
 import { ReactComponent as UserIcon } from 'svg/user.svg';
@@ -58,6 +59,16 @@ export default function Sidebar(props) {
 
   const bottomPart = (
     <div className={cx('bottom')}>
+      {isUserAdmin ? (
+        <NavLink
+          to="/insights"
+          className={cx('sidebar-item')}
+          activeClassName={cx('sidebar-item-active')}
+          title="Build metrics"
+        >
+          <MetricsIcon />
+        </NavLink>
+      ) : null}
       {isUserAdmin ? (
 
         <NavLink

@@ -8,6 +8,7 @@ import Builds from 'pages/builds';
 import Deployments from 'pages/deployments';
 import Home from 'pages/home';
 import Login from 'pages/login';
+import Metrics from 'pages/metrics';
 import NotFound from 'pages/not-found';
 import Repo from 'pages/repo';
 import Settings from 'pages/settings';
@@ -24,6 +25,7 @@ export const Routes = {
   Logout: (props) => <RouteGuard component={Welcome} {...props} />,
   LoginError: (props) => <RouteGuard component={Welcome} {...props} />,
   Account: (props) => <RouteGuard component={Account} {...props} />,
+  Metrics: (props) => <RouteGuard component={Metrics} {...props} />,
   // @TODO: add a proper admin settings page
   Admin: (props) => <RouteGuard component={() => <h1>Admin Settings</h1>} {...props} />,
   Branches: (props) => <RouteGuard component={Branches} {...props} />,
