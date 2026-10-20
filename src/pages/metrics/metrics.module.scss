@@ -11,6 +11,13 @@ $shadow: 0 0 1px rgba(40, 41, 61, 0.08), 0 0.5px 2px rgba(96, 97, 112, 0.16);
   max-width: 1700px;
   padding: 0 40px 60px;
   margin: 0 auto;
+
+  // form controls do not inherit the body font by default.
+  button,
+  input,
+  select {
+    font-family: inherit;
+  }
 }
 
 .header {
@@ -138,13 +145,18 @@ $shadow: 0 0 1px rgba(40, 41, 61, 0.08), 0 0.5px 2px rgba(96, 97, 112, 0.16);
 .repo-picker-panel {
   position: absolute;
   top: calc(100% + 6px);
-  right: 0;
+  left: 0;
   z-index: 10;
   width: 380px;
   padding: 12px;
   background: #fff;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(40, 41, 61, 0.04), 0 8px 16px rgba(96, 97, 112, 0.16);
+}
+
+.repo-picker-panel-right {
+  right: 0;
+  left: auto;
 }
 
 .repo-picker-search {
@@ -537,9 +549,8 @@ $shadow: 0 0 1px rgba(40, 41, 61, 0.08), 0 0.5px 2px rgba(96, 97, 112, 0.16);
 
 .heatmap {
   display: grid;
-  grid-template-columns: 40px repeat(24, minmax(0, 1fr));
+  grid-template-columns: 40px repeat(24, minmax(0, 1fr)) 120px;
   gap: 3px;
-  max-width: 1000px;
 }
 
 .heatmap-hour,
@@ -548,15 +559,69 @@ $shadow: 0 0 1px rgba(40, 41, 61, 0.08), 0 0.5px 2px rgba(96, 97, 112, 0.16);
   color: $muted;
 }
 
+.heatmap-hour {
+  text-align: center;
+}
+
 .heatmap-day {
   display: flex;
   align-items: center;
 }
 
 .heatmap-cell {
-  height: 22px;
+  height: 26px;
   background-color: #f3f4f8;
   border-radius: 3px;
+}
+
+.heatmap-total-head {
+  padding-left: 12px;
+  text-align: left;
+}
+
+.heatmap-total {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-left: 12px;
+}
+
+.heatmap-total-bar {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  left: 0;
+  background-color: rgba(2, 120, 213, 0.15);
+  border-radius: 3px;
+}
+
+.heatmap-total-value {
+  position: relative;
+  padding-left: 6px;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  color: $text;
+}
+
+.heatmap-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 12px;
+  font-size: 12px;
+  color: $muted;
+}
+
+.heatmap-legend {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.heatmap-legend-cell {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
 }
 
 @media (max-width: 1280px) {

@@ -106,29 +106,65 @@ export function SeriesChart({ series, bucket }) {
   );
 }
 
+const heatColor = (value, max) => (value ? `rgba(2, 120, 213, ${0.12 + (value / max) * 0.88})` : undefined);
+
+const LEGEND_STEPS = [0, 0.25, 0.5, 0.75, 1];
+
+const findPeak = (data) => {
+  let peak = null;
+  data.forEach((row, day) => row.forEach((value, hour) => {
+    if (value && (!peak || value > peak.value)) peak = { day, hour, value };
+  }));
+  return peak;
+};
+
 export function Heatmap({ data }) {
   const max = Math.max(1, ...data.flat());
+  const totals = data.map((row) => row.reduce((sum, value) => sum + value, 0));
+  const maxTotal = Math.max(1, ...totals);
+  const peak = findPeak(data);
 
   return (
-    <div className={cx('heatmap')}>
-      <span />
-      {HOURS.map((hour) => (
-        <span key={hour} className={cx('heatmap-hour')}>{hour % 3 === 0 ? hour : ''}</span>
-      ))}
-      {data.map((row, day) => (
-        <React.Fragment key={WEEKDAYS[day]}>
-          <span className={cx('heatmap-day')}>{WEEKDAYS[day]}</span>
-          {row.map((value, hour) => (
-            <span
-              // eslint-disable-next-line react/no-array-index-key
-              key={hour}
-              className={cx('heatmap-cell')}
-              style={value ? { backgroundColor: `rgba(2, 120, 213, ${0.12 + (value / max) * 0.88})` } : null}
-              title={`${WEEKDAYS[day]} ${String(hour).padStart(2, '0')}:00 – ${value} builds`}
-            />
+    <>
+      <div className={cx('heatmap')}>
+        <span />
+        {HOURS.map((hour) => (
+          <span key={hour} className={cx('heatmap-hour')}>{hour}</span>
+        ))}
+        <span className={cx('heatmap-hour', 'heatmap-total-head')}>Total</span>
+        {data.map((row, day) => (
+          <React.Fragment key={WEEKDAYS[day]}>
+            <span className={cx('heatmap-day')}>{WEEKDAYS[day]}</span>
+            {row.map((value, hour) => (
+              <span
+                // eslint-disable-next-line react/no-array-index-key
+                key={hour}
+                className={cx('heatmap-cell')}
+                style={{ backgroundColor: heatColor(value, max) }}
+                title={`${WEEKDAYS[day]} ${String(hour).padStart(2, '0')}:00 – ${value} builds`}
+              />
+            ))}
+            <span className={cx('heatmap-total')} title={`${totals[day]} builds on ${WEEKDAYS[day]}`}>
+              <span className={cx('heatmap-total-bar')} style={{ width: `${(totals[day] / maxTotal) * 100}%` }} />
+              <span className={cx('heatmap-total-value')}>{formatNumber(totals[day])}</span>
+            </span>
+          </React.Fragment>
+        ))}
+      </div>
+      <div className={cx('heatmap-footer')}>
+        <span>
+          {peak
+            ? `Peak: ${WEEKDAYS[peak.day]} ${String(peak.hour).padStart(2, '0')}:00 · ${formatNumber(peak.value)} builds`
+            : 'No builds in this period.'}
+        </span>
+        <span className={cx('heatmap-legend')}>
+          Less
+          {LEGEND_STEPS.map((step) => (
+            <i key={step} className={cx('heatmap-cell', 'heatmap-legend-cell')} style={{ backgroundColor: heatColor(step * max, max) }} />
           ))}
-        </React.Fragment>
-      ))}
-    </div>
+          More
+        </span>
+      </div>
+    </>
   );
 }

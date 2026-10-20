@@ -156,7 +156,8 @@ export const formatDuration = (secs) => {
 
 export const formatHours = (secs) => {
   const hours = secs / 3600;
-  return `${hours >= 100 ? Math.round(hours).toLocaleString() : hours.toFixed(1)}h`;
+  // no thousands separator: in pt-BR "3.164h" reads as three hours.
+  return `${hours >= 100 ? Math.round(hours) : hours.toFixed(1)}h`;
 };
 
 export const formatPercent = (value) => `${(value * 100).toFixed(1)}%`;

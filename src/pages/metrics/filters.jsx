@@ -10,6 +10,9 @@ import styles from './metrics.module.scss';
 
 const cx = classNames.bind(styles);
 
+// keep in sync with .repo-picker-panel width.
+const PICKER_PANEL_WIDTH = 380;
+
 export default function Filters({
   params, range, repos, onChange,
 }) {
@@ -97,6 +100,7 @@ export default function Filters({
 
 function RepoPicker({ repos, excluded, onChange }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [alignRight, setAlignRight] = useState(false);
   const [search, setSearch] = useState('');
   const ref = useRef(null);
 
@@ -108,6 +112,16 @@ function RepoPicker({ repos, excluded, onChange }) {
     document.addEventListener('mousedown', handleClick);
     return () => document.removeEventListener('mousedown', handleClick);
   }, [isOpen]);
+
+  // open the panel towards the side with room for it, so it never
+  // covers the sidebar or overflows the window.
+  const handleToggle = () => {
+    if (!isOpen && ref.current) {
+      const { left } = ref.current.getBoundingClientRect();
+      setAlignRight(left + PICKER_PANEL_WIDTH > window.innerWidth);
+    }
+    setIsOpen(!isOpen);
+  };
 
   const excludedSet = useMemo(() => new Set(excluded), [excluded]);
   const selectedCount = repos.filter((repo) => !excludedSet.has(repo.repo_id)).length;
@@ -129,12 +143,12 @@ function RepoPicker({ repos, excluded, onChange }) {
       <button
         type="button"
         className={cx('select', 'repo-picker-btn', { 'repo-picker-btn-filtered': excluded.length })}
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={handleToggle}
       >
         {summary}
       </button>
       {isOpen && (
-        <div className={cx('repo-picker-panel')}>
+        <div className={cx('repo-picker-panel', { 'repo-picker-panel-right': alignRight })}>
           <input
             type="search"
             className={cx('repo-picker-search')}
